@@ -1,2 +1,2 @@
 # GradSchoolNEU_CS5200
-This is Database Mangement System course taken at Northeastern Graduate School
+This is a Database Management System course taken in Graduate School at Northeastern University
