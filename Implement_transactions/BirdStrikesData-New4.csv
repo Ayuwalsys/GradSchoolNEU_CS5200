@@ -1,0 +1,11 @@
+rid,aircraft,airport,model,impact,flight_date,damage,airline,origin,flight_phase,wildlife_size,sky_conditions,pilot_warned_flag,altitude_ft,heavy_flag
+130256,Airplane,CHARLOTTESVILLE-ALBEMARLE ARPT,B-737-800,None,03/10/2023,Damage,Sample Airline,Sample State,Climb,Large,Some Cloud,Y,273,Yes
+288685,Airplane,SANTA MONICA MUNICIPAL,B-737-800,None,11/21/2021,Damage,Sample Airline,Sample State,Climb,Medium,Overcast,Y,5852,Yes
+378809,Airplane,JOHN WAYNE AIRPORT,B-737-800,None,02/22/2023,Damage,Sample Airline,Sample State,Climb,Large,Some Cloud,N,4346,Yes
+986680,Airplane,MARCO ISLAND ARPT,B-737-800,None,01/03/2021,Damage,Sample Airline,Sample State,Climb,Small,No Cloud,Y,1062,No
+196773,Airplane,NORTH PALM BEACH CNTY GEN AVTN,B-737-800,None,07/19/2022,No damage,Sample Airline,Sample State,Climb,Small,Some Cloud,N,900,Yes
+929644,Airplane,New Airport 2,B-737-800,None,05/01/2022,No damage,Sample Airline,New State,Climb,Small,Some Cloud,N,9107,No
+977103,Airplane,New Airport 1,B-737-800,None,02/23/2021,Damage,Sample Airline,New State,Climb,Large,No Cloud,N,7531,No
+234888,Airplane,HESLER-NOBLE FIELD ARPT,B-737-800,None,04/08/2022,No damage,Sample Airline,Sample State,Climb,Large,No Cloud,Y,8782,Yes
+521083,Airplane,SELAWICK ARPT,B-737-800,None,08/01/2022,No damage,Sample Airline,Sample State,Climb,Small,Some Cloud,N,3737,Yes
+550744,Airplane,MIAMI COUNTY ARPT,B-737-800,None,04/11/2022,No damage,Sample Airline,Sample State,Climb,Medium,Some Cloud,Y,3807,Yes

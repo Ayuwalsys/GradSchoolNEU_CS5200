@@ -1,0 +1,11 @@
+rid,aircraft,airport,model,impact,flight_date,damage,airline,origin,flight_phase,wildlife_size,sky_conditions,pilot_warned_flag,altitude_ft,heavy_flag
+364868,Airplane,SANTA MONICA MUNICIPAL,B-737-800,None,06/22/2021,Damage,Sample Airline,Sample State,Climb,Small,Some Cloud,Y,2433,No
+504140,Airplane,NORTH PALM BEACH CNTY GEN AVTN,B-737-800,None,08/27/2023,No damage,Sample Airline,Sample State,Climb,Small,Some Cloud,Y,9344,Yes
+849843,Airplane,NORTH PALM BEACH CNTY GEN AVTN,B-737-800,None,03/31/2023,Damage,Sample Airline,Sample State,Climb,Small,Overcast,N,4327,Yes
+873810,Airplane,MARCO ISLAND ARPT,B-737-800,None,11/27/2023,No damage,Sample Airline,Sample State,Climb,Large,No Cloud,N,6706,No
+380320,Airplane,SANTA MONICA MUNICIPAL,B-737-800,None,01/19/2021,Damage,Sample Airline,Sample State,Climb,Large,No Cloud,Y,3364,No
+606297,Airplane,New Airport 2,B-737-800,None,12/10/2023,No damage,Sample Airline,New State,Climb,Medium,Overcast,N,9869,Yes
+565910,Airplane,New Airport 1,B-737-800,None,03/23/2021,Damage,Sample Airline,New State,Climb,Large,No Cloud,Y,3264,Yes
+834567,Airplane,MANITOWOC COUNTY ARPT,B-737-800,None,04/08/2021,Damage,Sample Airline,Sample State,Climb,Large,Overcast,N,5929,Yes
+864654,Airplane,CREVE COEUR ARPT,B-737-800,None,06/18/2022,No damage,Sample Airline,Sample State,Climb,Medium,Some Cloud,N,2975,Yes
+224282,Airplane,GENERAL WM J FOX AIRFIELD,B-737-800,None,12/13/2023,Damage,Sample Airline,Sample State,Climb,Small,Some Cloud,Y,5434,Yes
