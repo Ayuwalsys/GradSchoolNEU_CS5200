@@ -5,7 +5,7 @@ library(readr)
 library(dplyr)
 library(lubridate)
 
-# Assuming the script with the function is named 'my_functions.R'
+# import the supporting function
 source("helper_functions.R")
 
 
@@ -24,8 +24,7 @@ connection <- dbConnect(RMySQL::MySQL(),
 # Load the bird strikes data
 bds_raw <- read_csv("BirdStrikesData-V3.csv")
 
-
-# Helper function to generate a random date
+# function to generate a random date
 random_date <- function() {
   start_date <- as.Date("2021-01-01")
   end_date <- as.Date("2024-01-01")
@@ -85,7 +84,6 @@ for (i in 1:5) {
   write_csv(data, paste0("BirdStrikesData-New", i, ".csv"))
 }
 
-
 # Function to read and process new data from CSV
 processNewData <- function(csvFilePath) {
   new_data <- read_csv(csvFilePath)
@@ -102,8 +100,6 @@ processNewData <- function(csvFilePath) {
   
   return(list(airports_data = airports_data, flights_data = flights_data, conditions_data = conditions_data, strikes_data = strikes_data))
 }
-
-
 
 loadDataAndInsert <- function(csvFilePath, useTransactions) {
   if (tolower(useTransactions) == "true") {
@@ -140,7 +136,6 @@ loadDataAndInsert <- function(csvFilePath, useTransactions) {
     message("Error in transaction: ", e$message)
   })
 }
-
 
 removeCSV_Data <- function(csvFilePath, connection) {
   # if CSV has unique identifiers like 'rid' which can be used to delete data

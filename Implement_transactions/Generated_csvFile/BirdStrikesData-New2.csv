@@ -1,0 +1,11 @@
+rid,aircraft,airport,model,impact,flight_date,damage,airline,origin,flight_phase,wildlife_size,sky_conditions,pilot_warned_flag,altitude_ft,heavy_flag
+407363,Airplane,INDIANAPOLIS INTL,B-737-800,None,12/06/2022,Damage,Sample Airline,Sample State,Climb,Large,Some Cloud,N,1944,Yes
+783603,Airplane,SITKA ROCKY GUTIERREZ ARPT,B-737-800,None,02/20/2023,Damage,Sample Airline,Sample State,Climb,Medium,No Cloud,N,7813,No
+481313,Airplane,YOUNGSTOWN-WARREN RGNL ARPT,B-737-800,None,06/11/2021,No damage,Sample Airline,Sample State,Climb,Medium,Overcast,Y,1689,No
+762738,Airplane,CLARK COUNTY REGIONAL ARPT (IN),B-737-800,None,02/07/2023,No damage,Sample Airline,Sample State,Climb,Large,Some Cloud,N,3265,No
+599805,Airplane,SITKA ROCKY GUTIERREZ ARPT,B-737-800,None,09/03/2021,Damage,Sample Airline,Sample State,Climb,Large,No Cloud,Y,4331,No
+272299,Airplane,New Airport 2,B-737-800,None,05/20/2021,Damage,Sample Airline,New State,Climb,Small,Some Cloud,Y,7840,Yes
+167166,Airplane,New Airport 2,B-737-800,None,08/01/2023,No damage,Sample Airline,New State,Climb,Medium,Overcast,N,948,No
+886542,Airplane,ZAMPERINI FIELD ARPT,B-737-800,None,11/09/2022,No damage,Sample Airline,Sample State,Climb,Large,Some Cloud,Y,8753,Yes
+435939,Airplane,WM FAIRCHILD INTL ARPT,B-737-800,None,05/12/2022,No damage,Sample Airline,Sample State,Climb,Large,Overcast,N,3216,No
+602676,Airplane,INDIANAPOLIS REGIONAL ARPT,B-737-800,None,08/03/2022,Damage,Sample Airline,Sample State,Climb,Small,Overcast,N,7354,No

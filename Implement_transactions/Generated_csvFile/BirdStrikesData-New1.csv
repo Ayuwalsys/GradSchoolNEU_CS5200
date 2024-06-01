@@ -1,0 +1,11 @@
+rid,aircraft,airport,model,impact,flight_date,damage,airline,origin,flight_phase,wildlife_size,sky_conditions,pilot_warned_flag,altitude_ft,heavy_flag
+514452,Airplane,HOMER ARPT,B-737-800,None,07/21/2021,No damage,Sample Airline,Sample State,Climb,Large,Overcast,Y,5819,Yes
+775426,Airplane,SITKA ROCKY GUTIERREZ ARPT,B-737-800,None,09/17/2022,No damage,Sample Airline,Sample State,Climb,Medium,No Cloud,Y,7850,Yes
+172074,Airplane,SITKA ROCKY GUTIERREZ ARPT,B-737-800,None,06/08/2022,No damage,Sample Airline,Sample State,Climb,Medium,Some Cloud,N,3853,Yes
+424635,Airplane,SITKA ROCKY GUTIERREZ ARPT,B-737-800,None,12/12/2023,Damage,Sample Airline,Sample State,Climb,Medium,Some Cloud,Y,4658,No
+213765,Airplane,CLARK COUNTY REGIONAL ARPT (IN),B-737-800,None,01/26/2023,No damage,Sample Airline,Sample State,Climb,Large,Overcast,Y,4812,No
+934720,Airplane,New Airport 2,B-737-800,None,06/10/2023,No damage,Sample Airline,New State,Climb,Small,No Cloud,N,7754,No
+145536,Airplane,New Airport 2,B-737-800,None,06/09/2021,No damage,Sample Airline,New State,Climb,Large,Some Cloud,N,471,No
+742430,Airplane,BOB HOPE ARPT,B-737-800,None,12/07/2023,No damage,Sample Airline,Sample State,Climb,Medium,Overcast,N,8418,No
+598436,Airplane,GENERAL RAFAEL BUELNA INTL,B-737-800,None,05/20/2021,No damage,Sample Airline,Sample State,Climb,Large,Some Cloud,Y,1046,Yes
+987742,Airplane,KONA INTL ARPT,B-737-800,None,06/26/2023,Damage,Sample Airline,Sample State,Climb,Large,No Cloud,Y,9378,No

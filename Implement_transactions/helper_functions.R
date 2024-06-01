@@ -16,8 +16,7 @@ prepareAirportsData <- function(df) {
   return(df_airports)
 }
 
-
-
+## Prepare flight Data
 prepareFlightsData <- function(df, airports_df) {
   # Convert flightDate to Date format
   df$flight_date <- as.Date(df$flight_date, format = "%m/%d/%Y")
@@ -44,10 +43,7 @@ prepareFlightsData <- function(df, airports_df) {
   return(flights_df)
 }
 
-
-
 ## Prepare Conditions Data
-
 prepareConditionsData <- function(df) {
   # Extract unique sky conditions and remove missing values
   unique_conditions <- unique(df$sky_conditions)
@@ -60,8 +56,6 @@ prepareConditionsData <- function(df) {
   
   return(conditions_df)
 }
-
-
 
 ## Prepare Strike Data
 prepareStrikesData <- function(df, flights_df, conditions_df) {
@@ -101,7 +95,6 @@ prepareStrikesData <- function(df, flights_df, conditions_df) {
   return(strikes_df)
 }
 
-
 ###POPULATE THE DATABASE TABLES
 
 ## Populate the airport table
@@ -126,9 +119,7 @@ insertAirportsData <- function(connection, df_airports) {
   })
 }
 
-
 ## Populate Flight Table
-
 insertFlightsData <- function(connection, df_flights) {
   # Convert isHeavy logical values to 1 (TRUE) or 0 (FALSE)
   df_flights$isHeavy <- ifelse(is.na(df_flights$isHeavy), 'NULL', as.integer(df_flights$isHeavy))
@@ -149,7 +140,6 @@ insertFlightsData <- function(connection, df_flights) {
   })
 }
 
-
 ## Populate 'conditions' table 
 insertConditionsData <- function(connection, df_conditions) {
   dbBegin(connection)
@@ -162,9 +152,6 @@ insertConditionsData <- function(connection, df_conditions) {
     stop(e)
   })
 }
-
-
-
 
 ## Populate 'strikes'
 insertStrikesData <- function(connection, df_strikes) {
@@ -190,5 +177,4 @@ insertStrikesData <- function(connection, df_strikes) {
     stop(e)
   })
 }
-
 

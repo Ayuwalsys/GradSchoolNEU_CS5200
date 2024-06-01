@@ -1,0 +1,11 @@
+rid,aircraft,airport,model,impact,flight_date,damage,airline,origin,flight_phase,wildlife_size,sky_conditions,pilot_warned_flag,altitude_ft,heavy_flag
+823259,Airplane,HOMER ARPT,B-737-800,None,02/11/2021,No damage,Sample Airline,Sample State,Climb,Small,Overcast,N,8764,Yes
+417027,Airplane,CLARK COUNTY REGIONAL ARPT (IN),B-737-800,None,05/29/2022,No damage,Sample Airline,Sample State,Climb,Medium,No Cloud,Y,6851,No
+343991,Airplane,HOMER ARPT,B-737-800,None,09/21/2021,Damage,Sample Airline,Sample State,Climb,Small,Some Cloud,Y,7797,Yes
+544215,Airplane,SITKA ROCKY GUTIERREZ ARPT,B-737-800,None,03/17/2021,Damage,Sample Airline,Sample State,Climb,Large,Overcast,Y,620,Yes
+153970,Airplane,SITKA ROCKY GUTIERREZ ARPT,B-737-800,None,01/14/2023,No damage,Sample Airline,Sample State,Climb,Small,Overcast,N,2410,No
+272214,Airplane,New Airport 2,B-737-800,None,08/24/2023,Damage,Sample Airline,New State,Climb,Large,Some Cloud,Y,8633,Yes
+555350,Airplane,New Airport 2,B-737-800,None,08/04/2022,No damage,Sample Airline,New State,Climb,Medium,Some Cloud,N,4028,Yes
+711188,Airplane,IGOR I SIKORSKY MEMORIAL,B-737-800,None,04/10/2021,No damage,Sample Airline,Sample State,Climb,Large,No Cloud,N,9563,No
+392290,Airplane,MIDLAND INTL,B-737-800,None,03/12/2021,No damage,Sample Airline,Sample State,Climb,Medium,Overcast,Y,6773,Yes
+540781,Airplane,HENRI COANDA INTL ARPT,B-737-800,None,05/23/2023,No damage,Sample Airline,Sample State,Climb,Medium,Overcast,N,9153,No
