@@ -1,0 +1,8 @@
+"0","airportsDataQuery <- function(connection){"
+"0","  output <- dbGetQuery(connection, ""SELECT * FROM airports"")"
+"0","  return(output)"
+"0","}"
+"0",""
+"0","#Used case:"
+"0","airportsTable <- airportsDataQuery(connection)"
+"0","airportsTable"

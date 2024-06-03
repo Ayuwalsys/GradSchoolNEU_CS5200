@@ -1,0 +1,6 @@
+"0",""
+"0","library(readr)"
+"0",""
+"0","#Load the bird strikes data"
+"0","bds.raw <- read_csv(""BirdStrikesData-V3.csv"")"
+"0","bds.raw"
