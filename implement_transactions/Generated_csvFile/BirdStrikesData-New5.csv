@@ -1,0 +1,11 @@
+rid,aircraft,airport,model,impact,flight_date,damage,airline,origin,flight_phase,wildlife_size,sky_conditions,pilot_warned_flag,altitude_ft,heavy_flag
+997046,Airplane,GREENWOOD MUNICIPAL ARPT,B-737-800,None,10/30/2022,No damage,Sample Airline,Sample State,Climb,Small,Some Cloud,N,3707,No
+636332,Airplane,GREENWOOD MUNICIPAL ARPT,B-737-800,None,01/10/2021,No damage,Sample Airline,Sample State,Climb,Large,Overcast,Y,3046,Yes
+747944,Airplane,GRAND JUNCTION REGIONAL ARPT,B-737-800,None,06/11/2021,Damage,Sample Airline,Sample State,Climb,Medium,Some Cloud,Y,9506,No
+219113,Airplane,GREENWOOD MUNICIPAL ARPT,B-737-800,None,04/08/2021,No damage,Sample Airline,Sample State,Climb,Medium,No Cloud,N,212,Yes
+161358,Airplane,AMSTERDAM SCHIPHOL,B-737-800,None,05/07/2021,Damage,Sample Airline,Sample State,Climb,Large,No Cloud,N,85,No
+186648,Airplane,New Airport 1,B-737-800,None,10/27/2022,Damage,Sample Airline,New State,Climb,Medium,Some Cloud,N,3393,No
+860594,Airplane,New Airport 1,B-737-800,None,08/17/2023,Damage,Sample Airline,New State,Climb,Medium,Overcast,N,8904,Yes
+568198,Airplane,FORT DODGE REGIONAL,B-737-800,None,10/26/2021,No damage,Sample Airline,Sample State,Climb,Large,Overcast,N,2196,Yes
+884314,Airplane,TULSA INTL,B-737-800,None,06/29/2022,No damage,Sample Airline,Sample State,Climb,Large,No Cloud,Y,1320,No
+553236,Airplane,COTE D AZUR,B-737-800,None,01/18/2023,Damage,Sample Airline,Sample State,Climb,Medium,Some Cloud,N,1539,No

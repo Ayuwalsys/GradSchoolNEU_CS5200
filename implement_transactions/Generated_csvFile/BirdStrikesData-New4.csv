@@ -1,0 +1,11 @@
+rid,aircraft,airport,model,impact,flight_date,damage,airline,origin,flight_phase,wildlife_size,sky_conditions,pilot_warned_flag,altitude_ft,heavy_flag
+525492,Airplane,GRAND JUNCTION REGIONAL ARPT,B-737-800,None,02/13/2021,Damage,Sample Airline,Sample State,Climb,Medium,Some Cloud,N,2871,No
+582207,Airplane,AMSTERDAM SCHIPHOL,B-737-800,None,07/17/2023,Damage,Sample Airline,Sample State,Climb,Large,No Cloud,N,1912,No
+325908,Airplane,WALLBLAKE,B-737-800,None,04/20/2022,No damage,Sample Airline,Sample State,Climb,Small,Overcast,N,5987,Yes
+192531,Airplane,FRANK WILEY FIELD ARPT,B-737-800,None,04/20/2021,No damage,Sample Airline,Sample State,Climb,Large,Some Cloud,N,2537,No
+245886,Airplane,AMSTERDAM SCHIPHOL,B-737-800,None,04/22/2022,Damage,Sample Airline,Sample State,Climb,Medium,Overcast,Y,2568,Yes
+205681,Airplane,New Airport 1,B-737-800,None,03/30/2022,No damage,Sample Airline,New State,Climb,Medium,Overcast,Y,5022,Yes
+101161,Airplane,New Airport 2,B-737-800,None,01/16/2022,Damage,Sample Airline,New State,Climb,Small,Overcast,N,4268,Yes
+501394,Airplane,NASHVILLE INTL,B-737-800,None,05/25/2022,No damage,Sample Airline,Sample State,Climb,Medium,Overcast,Y,9433,No
+146260,Airplane,MARCO POLO INTL,B-737-800,None,09/15/2021,No damage,Sample Airline,Sample State,Climb,Small,No Cloud,N,7016,No
+712957,Airplane,MESQUITE METRO ARPT,B-737-800,None,08/21/2022,No damage,Sample Airline,Sample State,Climb,Large,Some Cloud,N,419,No

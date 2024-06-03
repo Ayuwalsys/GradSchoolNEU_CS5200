@@ -1,0 +1,11 @@
+rid,aircraft,airport,model,impact,flight_date,damage,airline,origin,flight_phase,wildlife_size,sky_conditions,pilot_warned_flag,altitude_ft,heavy_flag
+957322,Airplane,GRAND JUNCTION REGIONAL ARPT,B-737-800,None,12/11/2021,Damage,Sample Airline,Sample State,Climb,Medium,Overcast,Y,4438,No
+120233,Airplane,GRAND JUNCTION REGIONAL ARPT,B-737-800,None,05/25/2021,Damage,Sample Airline,Sample State,Climb,Large,Some Cloud,Y,6834,No
+493634,Airplane,GRAND JUNCTION REGIONAL ARPT,B-737-800,None,01/30/2022,No damage,Sample Airline,Sample State,Climb,Small,Some Cloud,Y,4086,Yes
+898538,Airplane,FRANK WILEY FIELD ARPT,B-737-800,None,11/26/2022,Damage,Sample Airline,Sample State,Climb,Large,Overcast,Y,3007,No
+638363,Airplane,FRANK WILEY FIELD ARPT,B-737-800,None,12/19/2022,No damage,Sample Airline,Sample State,Climb,Large,No Cloud,Y,8913,Yes
+367979,Airplane,New Airport 1,B-737-800,None,09/25/2022,No damage,Sample Airline,New State,Climb,Medium,No Cloud,Y,178,No
+301362,Airplane,New Airport 1,B-737-800,None,08/04/2023,Damage,Sample Airline,New State,Climb,Small,Some Cloud,Y,3258,No
+155226,Airplane,ORCAS ISLAND ARPT,B-737-800,None,10/07/2021,No damage,Sample Airline,Sample State,Climb,Medium,No Cloud,Y,7018,Yes
+218712,Airplane,SANTA MONICA MUNICIPAL,B-737-800,None,06/05/2021,Damage,Sample Airline,Sample State,Climb,Large,Some Cloud,N,9362,No
+245874,Airplane,LYNDEN PINDLING INTL ARPT,B-737-800,None,01/03/2023,No damage,Sample Airline,Sample State,Climb,Medium,No Cloud,Y,550,Yes

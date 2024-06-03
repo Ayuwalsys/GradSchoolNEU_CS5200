@@ -1,0 +1,11 @@
+rid,aircraft,airport,model,impact,flight_date,damage,airline,origin,flight_phase,wildlife_size,sky_conditions,pilot_warned_flag,altitude_ft,heavy_flag
+796444,Airplane,FRANK WILEY FIELD ARPT,B-737-800,None,09/10/2023,Damage,Sample Airline,Sample State,Climb,Medium,Some Cloud,Y,114,No
+263319,Airplane,WALLBLAKE,B-737-800,None,02/09/2021,Damage,Sample Airline,Sample State,Climb,Small,Overcast,N,5350,No
+230983,Airplane,FRANK WILEY FIELD ARPT,B-737-800,None,05/18/2021,Damage,Sample Airline,Sample State,Climb,Medium,Some Cloud,N,3641,No
+122888,Airplane,WALLBLAKE,B-737-800,None,02/02/2021,Damage,Sample Airline,Sample State,Climb,Large,No Cloud,Y,4243,Yes
+444735,Airplane,AMSTERDAM SCHIPHOL,B-737-800,None,07/23/2023,Damage,Sample Airline,Sample State,Climb,Small,Overcast,N,3375,Yes
+954045,Airplane,New Airport 2,B-737-800,None,01/13/2022,Damage,Sample Airline,New State,Climb,Medium,No Cloud,N,2867,No
+688847,Airplane,New Airport 2,B-737-800,None,05/05/2021,Damage,Sample Airline,New State,Climb,Large,Some Cloud,N,2627,Yes
+699038,Airplane,CAPITAL CITY ARPT (PA),B-737-800,None,03/01/2022,No damage,Sample Airline,Sample State,Climb,Large,No Cloud,Y,8976,Yes
+289401,Airplane,JOPLIN REGIONAL,B-737-800,None,04/07/2021,No damage,Sample Airline,Sample State,Climb,Medium,Some Cloud,Y,9009,Yes
+455919,Airplane,MC GUIRE AIR FORCE BASE,B-737-800,None,03/21/2023,Damage,Sample Airline,Sample State,Climb,Large,Overcast,N,4208,No

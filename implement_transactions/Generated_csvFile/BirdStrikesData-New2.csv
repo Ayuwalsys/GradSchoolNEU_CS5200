@@ -1,0 +1,11 @@
+rid,aircraft,airport,model,impact,flight_date,damage,airline,origin,flight_phase,wildlife_size,sky_conditions,pilot_warned_flag,altitude_ft,heavy_flag
+570260,Airplane,GRAND JUNCTION REGIONAL ARPT,B-737-800,None,10/28/2022,No damage,Sample Airline,Sample State,Climb,Medium,Overcast,Y,800,No
+910031,Airplane,FRANK WILEY FIELD ARPT,B-737-800,None,08/16/2022,No damage,Sample Airline,Sample State,Climb,Small,No Cloud,N,9502,No
+969107,Airplane,WALLBLAKE,B-737-800,None,03/22/2022,No damage,Sample Airline,Sample State,Climb,Small,No Cloud,N,6272,No
+930947,Airplane,AMSTERDAM SCHIPHOL,B-737-800,None,06/29/2022,No damage,Sample Airline,Sample State,Climb,Large,Some Cloud,Y,5439,Yes
+496639,Airplane,GREENWOOD MUNICIPAL ARPT,B-737-800,None,04/06/2023,Damage,Sample Airline,Sample State,Climb,Large,No Cloud,Y,9694,No
+689050,Airplane,New Airport 1,B-737-800,None,07/05/2022,Damage,Sample Airline,New State,Climb,Small,Some Cloud,Y,9026,No
+652761,Airplane,New Airport 2,B-737-800,None,01/01/2022,Damage,Sample Airline,New State,Climb,Medium,No Cloud,N,7149,No
+869381,Airplane,ORLANDO SANFORD INTL AIRPORT,B-737-800,None,01/11/2023,Damage,Sample Airline,Sample State,Climb,Medium,Overcast,N,6942,Yes
+234991,Airplane,ASPEN-PITKIN CO/SARD,B-737-800,None,01/07/2023,Damage,Sample Airline,Sample State,Climb,Medium,No Cloud,Y,4697,No
+850431,Airplane,SIOUX GATEWAY ARPT,B-737-800,None,08/21/2022,Damage,Sample Airline,Sample State,Climb,Medium,No Cloud,N,3291,Yes

@@ -101,7 +101,6 @@ prepareStrikesData <- function(df, flights_df, conditions_df) {
   return(strikes_df)
 }
 
-
 ###POPULATE THE DATABASE TABLES
 
 ## Populate the airport table
