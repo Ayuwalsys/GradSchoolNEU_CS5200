@@ -1,0 +1,8 @@
+"0","query <- ""SELECT Country, COUNT(CustomerId) AS NumberOfCustomers"
+"0","          FROM customers"
+"0","          GROUP BY country"
+"0","          ORDER BY NumberOfCustomers DESC"
+"0","          LIMIT 1;"""
+"0",""
+"0","result <- dbGetQuery(dbcon, query)"
+"0","print(result)"

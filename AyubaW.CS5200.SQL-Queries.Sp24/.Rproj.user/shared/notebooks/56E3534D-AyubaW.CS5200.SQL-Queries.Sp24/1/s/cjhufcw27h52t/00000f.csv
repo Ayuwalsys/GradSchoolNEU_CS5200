@@ -1,0 +1,8 @@
+"0","query <- ""SELECT g.Name AS GenreName, COUNT(t.TrackId) AS NumberOfTrack"
+"0","          FROM genres g"
+"0","          JOIN tracks t ON g.GenreId = t.GenreId"
+"0","          GROUP BY g.Name"
+"0","          HAVING COUNT(t.TrackId) >= 4"
+"0","          ORDER BY NumberOfTrack DESC"""
+"0","result <- dbGetQuery(dbcon, query)"
+"0","print(result)"

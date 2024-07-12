@@ -1,0 +1,5 @@
+"0","query <- ""SELECT Lastname, FirstName, Title, HireDate  "
+"0","FROM employees"
+"0","ORDER BY LastName;"""
+"0","result <- dbGetQuery(dbcon, query)"
+"0","print(result)"

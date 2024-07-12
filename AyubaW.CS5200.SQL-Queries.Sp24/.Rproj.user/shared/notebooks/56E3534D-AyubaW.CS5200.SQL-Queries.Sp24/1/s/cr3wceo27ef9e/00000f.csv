@@ -1,0 +1,7 @@
+"0","query <- ""SELECT SUM(i.Total) AS TotalSpent"
+"0","          FROM customers c"
+"0","          JOIN invoices i ON c.CustomerId = i.CustomerId"
+"0","          WHERE c.Country NOT IN('Argentina', 'Bolivia', 'Brazil', 'Chile', 'Colombia', "
+"0","          'Ecuador', 'Guyana', 'Paraguay', 'Peru', 'Suriname', 'Uruguay', 'Venezuela')"""
+"0","result <- dbGetQuery(dbcon, query)"
+"0","print(result)"

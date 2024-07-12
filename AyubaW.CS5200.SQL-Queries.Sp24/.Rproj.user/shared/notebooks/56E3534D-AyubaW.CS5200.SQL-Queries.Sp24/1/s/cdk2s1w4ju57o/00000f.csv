@@ -1,0 +1,7 @@
+"0","query <- ""SELECT COUNT(*) AS NumberOfEmployeesWithoutCustomers"
+"0","          FROM employees e"
+"0","          LEFT JOIN customers c ON e.employeeId = c.SupportRepId"
+"0","          WHERE c.SupportRepId IS NULL;"""
+"0",""
+"0","result <- dbGetQuery(dbcon, query)"
+"0","print(result)"

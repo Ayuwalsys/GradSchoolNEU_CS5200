@@ -1,0 +1,4 @@
+"0","query <- ""SELECT DISTINCT Name"
+"0","          FROM media_types;"""
+"0","result <- dbGetQuery(dbcon, query)"
+"0","print(result)"

@@ -1,0 +1,5 @@
+"0","query <- ""SELECT COUNT(DISTINCT GenreId) AS TotalNumberOfDistinctGenres"
+"0","          FROM genres;"""
+"0",""
+"0","result <- dbGetQuery(dbcon, query)"
+"0","print(result)"

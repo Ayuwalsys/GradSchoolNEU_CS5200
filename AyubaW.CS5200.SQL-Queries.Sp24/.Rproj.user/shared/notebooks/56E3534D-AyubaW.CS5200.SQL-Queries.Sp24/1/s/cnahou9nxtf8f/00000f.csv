@@ -1,0 +1,7 @@
+"0",""
+"0","query <- ""SELECT COUNT(*)"
+"0","          FROM albums"
+"0","          WHERE Title Like '%Classic%' AND Title NOT LIKE '%Hard%';"""
+"0",""
+"0","result <- dbGetQuery(dbcon, query)"
+"0","print(result)"

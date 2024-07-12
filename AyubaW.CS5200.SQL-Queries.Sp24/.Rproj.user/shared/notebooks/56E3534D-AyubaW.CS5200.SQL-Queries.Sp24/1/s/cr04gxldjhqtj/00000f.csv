@@ -1,0 +1,7 @@
+"0","query <- ""SELECT LastName, FirstName"
+"0","          FROM employees"
+"0","          ORDER BY STRFTIME('%Y-%m', BirthDate) DESC"
+"0","          LIMIT 1;"""
+"0",""
+"0","result <- dbGetQuery(dbcon, query)"
+"0","print(result)"

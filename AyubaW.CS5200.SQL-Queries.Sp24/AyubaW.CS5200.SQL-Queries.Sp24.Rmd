@@ -1,0 +1,291 @@
+---
+title: "R Notebook:Query a Database with SQL"
+author: "By Waliu Ayuba"
+output:
+  html_document:
+    df_print: paged
+---
+
+
+
+```{r}
+library(RSQLite)
+dbfile <-"MediaDB.db"
+dbcon <- dbConnect(SQLite(), dbfile)
+```
+
+
+## 1.What are the last name, first name, title, and hire date of all employees, sorted by last name?
+```{r}
+query <- "SELECT Lastname, FirstName, Title, HireDate  
+FROM employees
+ORDER BY LastName;"
+result <- dbGetQuery(dbcon, query)
+print(result)
+```
+
+
+
+## 2. What are the names of each genre and the number of distinct albums in that genre? 
+```{r}
+query <- "SELECT g.Name AS GenreName, COUNT(DISTINCT a.AlbumId) AS NumberOfDistinctAlbums
+FROM genres g
+JOIN tracks t ON g.GenreId = t.GenreId
+JOIN albums a ON t.AlbumId = a.AlbumId
+GROUP BY g.Name
+ORDER BY NumberOfDistinctAlbums DESC;"
+
+result <- dbGetQuery(dbcon, query)
+print(result)
+```
+
+
+## 3.What are the distinct media types?
+```{r}
+query <- "SELECT DISTINCT Name
+          FROM media_types;"
+result <- dbGetQuery(dbcon, query)
+print(result)
+```
+
+## 4. List the number of tracks by genre, ordered from most to least, restricted to those genres for which there are at least four tracks.
+```{r}
+query <- "SELECT g.Name AS GenreName, COUNT(t.TrackId) AS NumberOfTrack
+          FROM genres g
+          JOIN tracks t ON g.GenreId = t.GenreId
+          GROUP BY g.Name
+          HAVING COUNT(t.TrackId) >= 4
+          ORDER BY NumberOfTrack DESC"
+result <- dbGetQuery(dbcon, query)
+print(result)
+```
+
+
+## 5. What is the last name and first name of the youngest employee?
+```{r}
+query <- "SELECT LastName, FirstName
+          FROM employees
+          ORDER BY STRFTIME('%Y-%m', BirthDate) DESC
+          LIMIT 1;"
+
+result <- dbGetQuery(dbcon, query)
+print(result)
+```
+
+## 6. What are the total number of unique purchases for each Brazilian state (e.g., MG, SP, etc.), ordered alphabetically by state, and in which there were at least two purchases?
+
+```{r}
+query <- "SELECT c.State, COUNT(DISTINCT i.InvoiceId) AS TotalPurchases
+          FROM customers c
+          JOIN invoices i ON c.CustomerId = i.CustomerId
+          WHERE c.Country = 'Brazil'
+          GROUP BY c.State
+          HAVING COUNT(DISTINCT i.InvoiceId) >= 2
+          ORDER BY c.State ASC;"
+
+result <- dbGetQuery(dbcon, query)
+print(result)
+```
+
+## 7. How many employees never worked with a single customer, i.e., they appear in the employees table but not in the customers table?
+```{r}
+query <- "SELECT COUNT(*) AS NumberOfEmployeesWithoutCustomers
+          FROM employees e
+          LEFT JOIN customers c ON e.employeeId = c.SupportRepId
+          WHERE c.SupportRepId IS NULL;"
+
+result <- dbGetQuery(dbcon, query)
+print(result)
+```
+
+## 8. How many albums contain the substring "Classic" but not "Hard" in the album title?
+
+```{r}
+
+query <- "SELECT COUNT(*)
+          FROM albums
+          WHERE Title Like '%Classic%' AND Title NOT LIKE '%Hard%';"
+
+result <- dbGetQuery(dbcon, query)
+print(result)
+```
+## 9. What is the total number of distinct genres?
+
+```{r}
+query <- "SELECT COUNT(DISTINCT GenreId) AS TotalNumberOfDistinctGenres
+          FROM genres;"
+
+result <- dbGetQuery(dbcon, query)
+print(result)
+```
+
+
+## 10. What is the total "time" of all tracks per media type in hours, i.e., add up the "Milliseconds" column in tracks? Display the media type and the time in hours rounded to one decimals. Only consider media types with at least one track.
+
+
+```{r}
+
+query <- "SELECT mt.Name AS MediaType,
+          ROUND(SUM(tr.Milliseconds) / 3600000.0,1) AS TotalTimeInHours
+          FROM media_types mt
+          JOIN tracks tr ON mt.MediaTypeId = tr.MediaTypeId
+          GROUP BY mt.Name
+          HAVING COUNT(tr.TrackId) > 0;"
+
+result <- dbGetQuery(dbcon, query)
+print(result)
+```
+
+
+## 11. What is the title and artist name of the longest album, in terms of minutes of playtime of all tracks on that albums?
+
+```{r}
+query <- "SELECT al.Title AS AlbumTitle, ar.Name AS ArtistName, 
+          SUM(tr.Milliseconds) / 60000.0 AS TotalMinutes
+          FROM albums al
+          JOIN tracks tr ON al.AlbumId = tr.AlbumId
+          JOIN  artists ar ON al.ArtistId = ar.ArtistId
+          GROUP BY al.AlbumId, al.Title, ar.Name
+          ORDER BY TotalMinutes DESC
+          LIMIT 1;"
+result <- dbGetQuery(dbcon, query)
+print(result)
+```
+
+
+## 12. Which genre has the least number of tracks?
+
+```{r}
+query <- "SELECT g.Name AS GenreName, COUNT(t.TrackId) AS NumberOfTracks
+          FROM genres g
+          JOIN tracks t ON g.GenreId = t.GenreId
+          GROUP BY g.GenreId
+          ORDER BY NumberOfTracks ASC
+          LIMIT 1;
+          "
+result <- dbGetQuery(dbcon, query)
+print(result)
+```
+
+## 13. Which media format has the fewest tracks?
+
+```{r}
+query <- "SELECT mt.Name AS MediaType, COUNT(t.TrackId) AS NumberOfTracks
+          FROM media_types mt
+          JOIN tracks t ON mt.MediaTypeId = t.MediaTypeId
+          GROUP BY mt.MediaTypeId
+          ORDER BY NumberOfTracks ASC
+          LIMIT 1;"
+
+result <- dbGetQuery(dbcon, query)
+print(result)
+```
+
+
+## 14. For each country, what is the total number of unique customers and the total spent?
+
+```{r}
+query <- "SELECT c.Country, COUNT(DISTINCT c.CustomerId) AS TotalUniqueCustomers, 
+          SUM(i.Total) AS TotalSpent
+          FROM customers c
+          JOIN invoices i ON c.CustomerId = i.CustomerId
+          GROUP BY c.Country
+          ORDER BY c.Country"
+
+result <- dbGetQuery(dbcon, query)
+print(result)
+```
+
+
+## 15. What is the total amount spent by all customers who do not live in South America?
+
+```{r}
+query <- "SELECT SUM(i.Total) AS TotalSpent
+          FROM customers c
+          JOIN invoices i ON c.CustomerId = i.CustomerId
+          WHERE c.Country NOT IN('Argentina', 'Bolivia', 'Brazil', 'Chile', 'Colombia', 
+          'Ecuador', 'Guyana', 'Paraguay', 'Peru', 'Suriname', 'Uruguay', 'Venezuela')"
+result <- dbGetQuery(dbcon, query)
+print(result)
+```
+
+## 16. What is the difference in spending on any type of MPEG vs any type of AAC track?
+
+```{r}
+query <- "SELECT SUM(CASE WHEN mt.Name LIKE '%MPEG%' THEN ii.UnitPrice * ii.Quantity ELSE 0 END) AS TotalMPEG,
+          SUM(CASE WHEN mt.Name LIKE '%AAC%' THEN ii.UnitPrice * ii.Quantity ELSE 0 END) AS TotalAAC,
+          ABS(SUM(CASE WHEN mt.Name LIKE '%MPEG%' THEN ii.UnitPrice * ii.Quantity ELSE
+          0 END) - SUM(CASE WHEN mt.Name LIKE '%AAC%' THEN ii.UnitPrice * ii.Quantity ELSE 0 END)) AS MPEGandAACDiferences
+          FROM invoices i
+          JOIN invoice_items ii ON i.InvoiceId = ii.InvoiceId
+          JOIN tracks t ON ii.TrackId = t.TrackId
+          JOIN media_types mt ON t.MediaTypeId = mt.MediaTypeId;"
+
+result <- dbGetQuery(dbcon, query)
+print(result)
+```
+
+
+## 17. Which country has the most customers?
+
+```{r}
+query <- "SELECT Country, COUNT(CustomerId) AS NumberOfCustomers
+          FROM customers
+          GROUP BY country
+          ORDER BY NumberOfCustomers DESC
+          LIMIT 1;"
+
+result <- dbGetQuery(dbcon, query)
+print(result)
+```
+
+## 18. How many tracks did "Amy Winehouse" record?
+
+```{r}
+query <- "SELECT COUNT(t.TrackId) AS NumberOfTracks
+          FROM tracks t
+          JOIN albums a ON t.AlbumId = a.AlbumId
+          JOIN artists ar ON a.ArtistId = ar.ArtistId
+          WHERE ar.Name = 'Amy Winehouse';"
+
+
+result <- dbGetQuery(dbcon, query)
+print(result)
+```
+
+## 19. What is the name of the artist who earned the most, i.e., whose aggregate total of all tracks sold is the highest?
+
+```{r}
+
+query <- "SELECT ar.Name AS ArtistName, SUM(ii.UnitPrice * ii.Quantity) AS TotalEarned
+          FROM invoice_items ii
+          JOIN tracks t ON ii.TrackId = t.TrackId
+          JOIN albums a ON t.AlbumId = a.AlbumId
+          JOIN artists ar ON a.ArtistId = ar.ArtistId
+          GROUP BY ar.ArtistId, ar.Name
+          ORDER BY TotalEarned DESC
+          LIMIT 1;"
+
+result <- dbGetQuery(dbcon, query)
+print(result)
+```
+
+
+## 20. Which artist is the most popular in Paris? Popularity is defined in this context as the artist who was purchased most often by someone living in Paris.
+
+```{r}
+query <- "SELECT ar.Name AS ArtistName, COUNT(ii.TrackId) AS NumberOfPurchases
+          FROM customers c
+          JOIN invoices i ON c.CustomerId = i.CustomerId
+          JOIN invoice_items ii ON i.InvoiceId = ii.InvoiceId
+          JOIN tracks t ON ii.TrackId = t.TrackId
+          JOIN albums a ON t.AlbumId = a.AlbumId
+          JOIN artists ar ON a.ArtistId = ar.ArtistId
+          WHERE c.City = 'Paris'
+          GROUP BY ar.ArtistId
+          ORDER BY NumberOfPurchases DESC
+          LIMIT 1;"
+result <- dbGetQuery(dbcon, query)
+print(result)
+```
+
