@@ -1,0 +1,118 @@
+---
+title: "Weekly Sales Report"
+author: "Waliu Ayuba"
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(DBI)
+library(RMySQL)
+library(ggplot2)
+
+# Connect to MySQL Database
+con <- dbConnect(RMySQL::MySQL(), 
+                 dbname = "sql5699606", 
+                 host = "sql5.freemysqlhosting.net",
+                 port = 3306, 
+                 user = "sql5699606", 
+                 password = "GY1IlvutbB")
+
+
+```
+
+## Analytical Query I: Top Five Sales Reps by Year
+```{r echo=F, warning=FALSE}
+query <- "
+SELECT year, rep_name, SUM(total_amount_sold) as total_sales
+FROM rep_facts
+GROUP BY year, rep_name
+ORDER BY year, total_sales DESC
+LIMIT 5"
+results <- dbGetQuery(con, query)
+knitr::kable(results, caption = 'Top Five Sales Representatives by Year')
+
+```
+
+
+
+## Analytical Query II: Total Sales Per Product Per Quarter
+```{r echo=FALSE, warning=FALSE}
+query <- "
+SELECT year, quarter, product_name, SUM(total_amount_sold) as total_sales
+FROM product_facts
+GROUP BY year, quarter, product_name"
+results <- dbGetQuery(con, query)
+knitr::kable(results, caption = 'Total Sales Per Product Per Quarter')
+
+
+```
+
+
+## Analytical III: Units Sold Per Product Per Region
+```{r echo=FALSE, warning=FALSE}
+query <- "SELECT product_name, region, SUM(total_units_sold) as units_sold FROM product_facts GROUP BY product_name, region"
+results <- dbGetQuery(con, query)
+ggplot(results, aes(x=region, y=units_sold, group=product_name, color=product_name)) + 
+    geom_line() + 
+    labs(title="Units Sold Per Product Per Region", x="Region", y="Units Sold")
+
+```
+
+Explanation:
+The image displays a line graph titled "Units Sold Per Product Per Region." The graph plots the units sold of different pharmaceutical products across three regions: Brazil, Germany, and the USA. Each product is represented by a unique color, with the product names listed in the legend on the right.
+From left to right, three points on the x-axis correspond to the three regions. The y-axis measures the number of units sold, ranging from 1 million to a little over 3 million units. All products seem to follow a similar trend:
+
+- Fewer units sold in Brazil
+
+- A significant drop in units sold in Germany
+
+- A sharp increase in units sold in the USA
+
+The lines connecting the points show the relative differences in units sold per product per region. Notably, there's a dramatic increase in the number of products in the USA, suggesting a larger market size or higher demand in the USA compared to Brazil and Germany. Germany shows the lowest number of units sold among the three regions for all products. 
+
+
+## Analytical Query IV: 
+
+```{r average_sales_rep_year, echo=FALSE, warning=FALSE, }
+query <- "
+SELECT year, rep_name, AVG(average_amount_sold) as avg_sales
+FROM rep_facts
+GROUP BY year, rep_name
+ORDER BY year, rep_name"
+
+results <- dbGetQuery(con, query)
+
+# Convert the year to an integer if it is not already
+results$year <- as.integer(results$year)
+
+# Check if results are empty
+if(nrow(results) == 0) {
+  cat("No data available for plotting.")
+} else {
+  ggplot(results, aes(x=as.factor(year), y=avg_sales, color=rep_name, group=rep_name)) +
+    geom_line() +
+    geom_point() +
+    labs(title="Average Sales Per Sales Rep Over the Years", x="Year", y="Average Sales ($)", color="Sales Rep") +
+    theme_minimal()
+}
+
+
+```
+
+The line graph, titled "Average Sales Per Sales Rep Over the Years," is a crucial tool for understanding the sales performance of our representatives. It represents the average sales in dollars achieved by different sales representatives over a period spanning from 2020 to 2022.
+As indicated in the legend on the right, each sales representative is represented by a different color. The x-axis represents time, with a fractional part of the year (e.g., 2020 indicates the midpoint of 2020), while the y-axis represents the average sales in dollars.
+Let's delve into the insights this graph offers:
+
+- The sales performance of each representative varies significantly over the years.
+
+- Veronika Sixt (light blue line) shows a dramatic increase in average sales towards 2022, suggesting a significant performance improvement or a successful sales initiative.
+
+- Conversely, Walison da Silva (magenta line) started with higher average sales in 2020 but showed a decreasing trend over the next two years.
+
+- Aneeta Kappoorthy (red line) shows some fluctuations but ends slightly higher in 2022 than where they started in 2020.
+
+- Other representatives show various trends of increases and decreases over the years with no consistent pattern across the group.
