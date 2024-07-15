@@ -1,0 +1,69 @@
+# Let's write the Python script to handle the database operations.
+
+# Importing the necessary library for SQLite operations
+import sqlite3
+
+# Function to connect to the SQLite database
+def connect_to_db(db_path):
+    try:
+        conn = sqlite3.connect(db_path)
+        print("Successfully connected to the database.")
+        return conn
+    except sqlite3.Error as e:
+        print(f"Error connecting to the database: {e}")
+        return None
+
+# Function to add a new column to the "albums" table if it doesn't exist
+def add_play_time_column(conn):
+    cursor = conn.cursor()
+    # Check if column exists
+    cursor.execute("PRAGMA table_info(albums)")
+    columns_info = cursor.fetchall()
+    column_names = [info[1] for info in columns_info]
+    if 'play_time' not in column_names:
+        # Add the 'play_time' column
+        cursor.execute("""
+            ALTER TABLE albums
+            ADD COLUMN play_time NUMERIC CHECK(play_time >= 0)
+        """)
+        print("Column 'play_time' added to the 'albums' table.")
+    else:
+        print("Column 'play_time' already exists in the 'albums' table.")
+    conn.commit()
+
+# Function to calculate and update the play_time for all albums
+def update_album_play_times(conn):
+    cursor = conn.cursor()
+    # Update 'play_time' for each album
+    cursor.execute("""
+        UPDATE albums
+        SET play_time = (
+            SELECT SUM(milliseconds) / 60000.0
+            FROM tracks
+            WHERE tracks.AlbumId = albums.AlbumId
+        )
+    """)
+    conn.commit()
+    print("Album play times updated.")
+
+# Function to create a trigger for recalculating play_time after insert, update, or delete on tracks
+def create_play_time_trigger(conn):
+    cursor = conn.cursor()
+    # Drop the trigger if it already exists
+    cursor.execute("DROP TRIGGER IF EXISTS after_track_change")
+    # Create a new trigger
+    cursor.execute("""
+        CREATE TRIGGER after_track_change
+        AFTER INSERT OR UPDATE OR DELETE ON tracks
+        BEGIN
+            UPDATE albums
+            SET play_time = (
+                SELECT SUM(milliseconds) / 60000.0
+                FROM tracks
+                WHERE tracks.AlbumId = albums.AlbumId
+            )
+            WHERE AlbumId = NEW.AlbumId OR AlbumId = OLD.AlbumId;
+        END;
+    """)
+    conn.commit()
+   
