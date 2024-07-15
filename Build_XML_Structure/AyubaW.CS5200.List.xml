@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE to-do [
+<!ELEMENT to-do (list*)>
+<!ELEMENT list (item*)>
+<!ATTLIST list name ID #REQUIRED>
+<!ATTLIST list category (personal|school|home) #REQUIRED>
+<!ELEMENT item (title, desc, due)>
+<!ATTLIST item iid ID #REQUIRED>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT desc (#PCDATA)>
+<!ELEMENT due (#PCDATA)>
+]>
+
+<to-do>
+    <list name="Groceries" category="home">
+        <item iid="i1">
+            <title>Buy Whole Milk</title>
+            <desc>Whole cream milk - 1 liters</desc>
+            <due>2024-04-05</due>
+        </item>
+        <item iid="i2">
+            <title>Buy Egg</title>
+            <desc>Large size of egg - 1 crate</desc>
+            <due>2024-04-05</due>
+        </item>
+    </list>
+    <list name="Homework" category="school">
+        <item iid="i3">
+            <title>CS5200 Assignment</title>
+            <desc>Build XML Structure using pattern from lesson</desc>
+            <due>2024-04-10</due>
+        </item>
+    </list>
+    <list name="WeekendPlannerNote" category="personal">
+        <item iid="i4">
+            <title>Book Movie Tickets</title>
+            <desc>Superhero movie at the downtown cinema</desc>
+            <due>2024-04-15</due>
+        </item>
+        <item iid="i5">
+            <title>Blubike Cycling Trip</title>
+            <desc>Prepare bike and gear for the trip</desc>
+            <due>2024-04-25</due>
+        </item>
+    </list>
+</to-do>
