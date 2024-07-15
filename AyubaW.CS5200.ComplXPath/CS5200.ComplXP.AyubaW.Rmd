@@ -1,0 +1,112 @@
+---
+title: "Query XML"
+author: "Waliu Ayuba"
+
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+## Question 3
+```{r AddDTD, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE}
+library(XML)
+# Define the path to the XML file
+xml_file_path <- "~/Documents/Spring_Semester_24/CS_5200/AyubaW.CS5200.ComplXPath/orders.xml"
+
+```
+
+## Question 4
+```{r LoadXMLContainingDTD, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE}
+
+# Try parsing  XML file with validation
+tryCatch({
+    xml_doc <- xmlParse(xml_file_path, asText = FALSE, validate = TRUE)
+    print("XML document is valid.")
+}, error = function(e) {
+    print(paste("XML document is not valid:", e$message))
+})
+
+
+```
+
+
+## Question 5
+```{r namesCustomersUSA, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE}
+
+# Define the XPath expression for customers in the USA
+xpath_expr <- "//Customer[FullAddress/Country='USA']/CompanyName/text()"
+
+# XPath expression execution
+usaCustomers <- xpathSApply(xml_doc, xpath_expr, xmlValue)
+
+# Print names of customers in the USA
+print(usaCustomers)
+
+```
+
+## Question 6
+```{r percentageCustomers, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE}
+
+# XPath expression for counting total number of customers
+totalCustomersXpath <- "count(//Customer)"
+totalCustomers <- as.numeric(xpathSApply(xml_doc, totalCustomersXpath, xmlValue))
+
+# XPath expression for customers in the USA (from previous example)
+usaCustomersCount <- length(usaCustomers)
+
+# Calculate number of non-USA customers
+nonUsaCustomersCount <- totalCustomers - usaCustomersCount
+
+# Calculate percentage of non-USA customers
+percentageNonUsaCustomers <- (nonUsaCustomersCount / totalCustomers) * 100
+
+# Display result with formatted percentage
+print(sprintf("Percentage of customers not in the USA: %.2f%%", percentageNonUsaCustomers))
+
+
+```
+
+
+
+## Question 7
+```{r totalAmountPaidFreight , echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE}
+
+# XPath expression to select Freight for orders shipped to the USA
+xpathExpr <- "//Order[ShipInfo/ShipCountry='USA']/ShipInfo/Freight/text()"
+
+# Execute the XPath expression and convert results to numeric
+freightValues <- xpathSApply(xml_doc, xpathExpr, xmlValue)
+freightValuesNumeric <- as.numeric(freightValues)
+
+# Calculate the total freight cost
+totalFreightCost <- sum(freightValuesNumeric, na.rm = TRUE)
+
+# Display the total freight cost with a dollar sign
+print(paste("Total amount paid for freight for all orders within the USA: $", totalFreightCost, sep = ""))
+
+
+```
+
+
+
+## Question 8
+```{r averageAmountPaidFreight, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE}
+
+# XPath expression to select Freight for orders shipped to the USA
+xpathExpr <- "//Order[ShipInfo/ShipCountry='USA']/ShipInfo/Freight/text()"
+
+# Execute XPath expression and convert results to numeric
+freight_values <- xpathSApply(xml_doc, xpathExpr, xmlValue)
+freight_values_numeric <- as.numeric(freight_values)
+
+# Calculate the average freight cost
+averageFreightCost <- mean(freight_values_numeric, na.rm = TRUE)
+
+# Display the average freight cost
+print(paste("Average amount paid for freight for all orders shipped to the USA:", round(averageFreightCost, 2)))
+
+
+```
+
+
+
