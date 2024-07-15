@@ -1,0 +1,4 @@
+"0","# SQL query for total visits and unique restaurants"
+"0","total_unique <- sqldf(""SELECT COUNT(*) AS Total_Visits, COUNT(DISTINCT restaurant) AS Unique_Restaurants FROM all_data"")"
+"0",""
+"0","total_unique"

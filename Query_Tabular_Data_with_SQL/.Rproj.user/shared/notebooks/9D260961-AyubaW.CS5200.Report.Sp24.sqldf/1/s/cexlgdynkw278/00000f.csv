@@ -1,0 +1,38 @@
+"0",""
+"0","#URLs of the datasets"
+"0","url_jan_mar <- ""https://s3.us-east-2.amazonaws.com/artificium.us/assignments/80.xml/a-80-305/gen-xml/synthsalestxns-Jan2Mar.csv"""
+"0","url_sep_oct <- ""https://s3.us-east-2.amazonaws.com/artificium.us/assignments/80.xml/a-80-305/gen-xml/synthsalestxns-Sep2Oct.csv"""
+"0","url_nov_dec <- ""https://s3.us-east-2.amazonaws.com/artificium.us/assignments/80.xml/a-80-305/gen-xml/synthsalestxns-Nov2Dec.csv"""
+"0",""
+"0","#Load the datasets"
+"0","data_jan_mar <- read_csv(url_jan_mar)"
+"2","[1mRows: [22m[34m500[39m [1mColumns: [22m[34m8[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m────────────────────────────────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (7): name, phone, cc, date, amount, restaurant, wine
+[32mdbl[39m (1): guests"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"0","data_sep_oct <- read_csv(url_sep_oct)"
+"2","[1mRows: [22m[34m500[39m [1mColumns: [22m[34m8[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m────────────────────────────────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (7): name, phone, cc, date, amount, restaurant, wine
+[32mdbl[39m (1): guests"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"0","data_nov_dec <- read_csv(url_nov_dec)"
+"2","[1mRows: [22m[34m500[39m [1mColumns: [22m[34m8[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m────────────────────────────────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (7): name, phone, cc, date, amount, restaurant, wine
+[32mdbl[39m (1): guests"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"0","#Combine the datasets"
+"0","all_data <- bind_rows(data_jan_mar, data_sep_oct, data_nov_dec)"
+"0",""
+"0",""

@@ -1,0 +1,5 @@
+"0",""
+"0","# Summary of revenue by restaurant"
+"0","revenue_summary <- sqldf(""SELECT restaurant, COUNT(*) AS Total_Visits, AVG(amount) AS Average_Revenue FROM all_data GROUP BY restaurant"")"
+"0",""
+"0","revenue_summary"

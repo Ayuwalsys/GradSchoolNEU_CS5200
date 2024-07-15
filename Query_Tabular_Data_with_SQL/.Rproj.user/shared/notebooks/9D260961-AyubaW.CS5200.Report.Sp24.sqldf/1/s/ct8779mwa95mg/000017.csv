@@ -1,0 +1,6 @@
+"0",""
+"0",""
+"0","# Average party size and wine consumption percentage"
+"0","party_wine_stats <- sqldf(""SELECT AVG(guests) AS Average_Party_Size, AVG(CASE WHEN wine = 'Yes' THEN 1 ELSE 0 END) * 100 AS Wine_Consumption_Percentage FROM all_data"")"
+"0",""
+"0","party_wine_stats"

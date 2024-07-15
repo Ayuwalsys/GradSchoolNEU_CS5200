@@ -1,0 +1,71 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+library(sqldf)
+
+# URLs for CSV files
+#URLs of the datasets
+url_jan_mar <- "https://s3.us-east-2.amazonaws.com/artificium.us/assignments/80.xml/a-80-305/gen-xml/synthsalestxns-Jan2Mar.csv"
+url_sep_oct <- "https://s3.us-east-2.amazonaws.com/artificium.us/assignments/80.xml/a-80-305/gen-xml/synthsalestxns-Sep2Oct.csv"
+url_nov_dec <- "https://s3.us-east-2.amazonaws.com/artificium.us/assignments/80.xml/a-80-305/gen-xml/synthsalestxns-Nov2Dec.csv"
+
+# Read and combine data
+data_jan_mar <- read.csv(url_jan_mar)
+data_sep_oct <- read.csv(url_sep_oct)
+data_nov_dec <- read.csv(url_nov_dec)
+all_data <- rbind(data_jan_mar, data_sep_oct, data_nov_dec)
+
+# Convert 'amount' to numeric
+all_data$amount <- as.numeric(gsub("\\$", "", all_data$amount))
+# Convert 'date' to Date format (Correcting Year Format)
+all_data$date <- as.Date(all_data$date, format="%m/%d/%y")
+
+
+```
+
+
+```{r}
+# Total Visits and Unique Restaurants
+total_visits_unique_restaurants <- sqldf("SELECT COUNT(*) AS Total_Visits, COUNT(DISTINCT restaurant) AS Unique_Restaurants FROM all_data")
+
+# Date Range (Extracting Year)
+
+date_range <- sqldf("SELECT MIN(date) AS Start_Date, MAX(date) AS End_Date FROM all_data")
+
+date_range$Start_Year <- format(as.Date(date_range$Start_Date), "%Y")
+date_range$End_Year <- format(as.Date(date_range$End_Date), "%Y")
+
+# Average Amount Spent and Standard Deviation
+avg_std_amount <- sqldf("SELECT AVG(amount) AS Average_Amount, STDEV(amount) AS Std_Dev_Amount FROM all_data")
+
+# Most Visits and Largest Revenue
+most_visits <- sqldf("SELECT restaurant, COUNT(*) AS Visits FROM all_data GROUP BY restaurant ORDER BY Visits DESC LIMIT 1")
+largest_revenue <- sqldf("SELECT restaurant, SUM(amount) AS Revenue FROM all_data GROUP BY restaurant ORDER BY Revenue DESC LIMIT 1")
+
+# Average Party Size and Percentage of Parties Consuming Wine
+avg_party_size <- sqldf("SELECT AVG(guests) AS Average_Party_Size FROM all_data")
+wine_percentage <- sqldf("SELECT (SUM(CASE WHEN wine = 'Yes' THEN 1 ELSE 0 END) / CAST(COUNT(*) AS FLOAT)) * 100 AS Wine_Percentage FROM all_data")
+
+
+```
+
+
+
+### We recorded a total number of `r total_visits_unique_restaurants$Total_Visits` visits across `r total_visits_unique_restaurants$Unique_Restaurants` different restaurants from `r date_range$Start_Year` to `r date_range$End_Year`. The average amount spent for a visit across all restaurants is `r round(avg_std_amount$Average_Amount, 1)` (σ = `r round(avg_std_amount$Std_Dev_Amount, 1)`). The most visits were at `r most_visits$restaurant` while the largest revenue across all years was at `r largest_revenue$restaurant`. The average size of a party was `r round(avg_party_size$Average_Party_Size, 0)` and `r round(wine_percentage$Wine_Percentage, 1)`% of all parties consumed wine.
+
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
