@@ -1,0 +1,593 @@
+---
+title: "Analysis of Wildlife Strikes to Aircraft"
+author: "Waliu Ayuba"
+date: "Spring 2024"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+  html_notebook: default
+subtitle: Practicum I CS5200
+---
+
+### Database Connection
+```{r dbConnection, echo=F, message=F, warning=F}
+library(DBI)
+library(RMySQL)
+
+#data base credential
+connection <- dbConnect(RMySQL::MySQL(),
+                        dbname = "sql5690228",
+                        host = "sql5.freemysqlhosting.net",
+                        port = 3306,
+                        user = "sql5690228",
+                        password = "aeAxe7ta5e")
+
+
+```
+
+## SQL Command to create the 'airports' Table
+```{r createAirportsTable, echo=F, message=F, warning=F}
+
+dbExecute(connection, "
+          CREATE TABLE IF NOT EXISTS airports(
+          aid INT AUTO_INCREMENT PRIMARY KEY,
+          airportName TEXT,
+          airportState TEXT,
+          airportCode VARCHAR(255) DEFAULT 'ZZZ'
+          )")
+
+
+```
+
+
+##SQL Command to create 'flight' table and  link table with 'airports' table
+```{r createFlightLinkAirportTable, echo=F, message=F, warning=F}
+dbExecute(connection, "
+  CREATE TABLE IF NOT EXISTS flights(
+  fid INT AUTO_INCREMENT PRIMARY KEY,
+  date DATE,
+  originAirport INT,
+  airlineName TEXT,
+  aircraftType TEXT,
+  isHeavy BOOLEAN,
+  FOREIGN KEY(originAirport) REFERENCES airports(aid))"
+)
+```
+
+## Create 'conditions' Table
+```{r conditionsTable, echo=F, message=F, warning=F}
+dbExecute(connection, "
+          CREATE TABLE IF NOT EXISTS conditions(
+          cid INT AUTO_INCREMENT PRIMARY KEY,
+          sky_condition TEXT,
+          explanation TEXT
+          )"
+          
+          )
+```
+
+
+## Create 'strikes' table, link 'conditions' and 'flights' to the 'strikes' table
+```{r createStrikesTable, echo=F, message=F, warning=F}
+dbExecute(connection, "
+          CREATE TABLE IF NOT EXISTS strikes(
+          sid INT AUTO_INCREMENT PRIMARY KEY ,
+          fid INT,
+          numbirds INT,
+          impact TEXT,
+          damage BOOLEAN,
+          altitude INT CHECK (altitude >= 0),
+          conditions INT, 
+          FOREIGN KEY (fid) REFERENCES flights(fid),
+          FOREIGN KEY (conditions) REFERENCES conditions(cid)
+          
+          )"
+          
+          )
+
+
+
+```
+
+## Test Insertion into 'airports'
+```{r insertIntoAirports, echo=F, eval=F, message=F, warning=F}
+# Insert test data into airports table
+dbExecute(connection, "INSERT INTO airports (airportName, airportState, airportCode) VALUES ('Test Airport', 'Test State', 'TST')")
+
+# Retrieving test data from airports table
+dbGetQuery(connection, "SELECT * FROM airports WHERE airportCode = 'TST'")
+```
+
+## Test Insertion into 'flights' Table
+```{r insertIntoflights, echo=F, eval=F, message=F, warning=F  }
+# Insert test data into flights table
+dbExecute(connection, "INSERT INTO flights (date, originAirport, airlineName, aircraftType, isHeavy) VALUES ('2024-03-10', 1, 'Test Airline', 'Test Aircraft', FALSE)")
+
+# Retrieve test data from flights table
+dbGetQuery(connection, "SELECT * FROM flights WHERE airlineName = 'Test Airline'")
+
+
+```
+
+## Test Insertion into 'conditions' Table
+```{r insertIntoConiditions, echo=F, eval=F, message=F, warning=F}
+# Insert test data into conditions table
+dbExecute(connection, "INSERT INTO conditions (sky_condition, explanation) VALUES ('Clear', 'No clouds observed')")
+
+# Retrieve test data from conditions table
+dbGetQuery(connection, "SELECT * FROM conditions WHERE sky_condition = 'Clear'")
+
+
+```
+
+## Test Insertion into 'strikes' Table
+```{r insertIntoStrikes, echo=F, eval=F, message=F, warning=F}
+
+# Insert test data into strikes table
+dbExecute(connection, "INSERT INTO strikes (fid, numbirds, impact, damage, altitude, conditions) VALUES (1, 2, 'Minor', FALSE, 1000, 1)")
+
+# Retrieve test data from strikes table
+dbGetQuery(connection, "SELECT * FROM strikes WHERE numbirds = 2")
+
+```
+
+## Load Bird Strikes Data into DataFrame
+
+```{r loadBirdStrikesData, echo=FALSE, message=FALSE, warning=FALSE}
+
+library(readr)
+
+#Load the bird strikes data
+bds.raw <- read_csv("BirdStrikesData-V3.csv")
+bds.raw
+
+
+```
+
+
+
+## Prepare Airports Data
+
+```{r prepareAirportData, echo=F, message=F, warning=F}
+
+prepareAirportsData <- function(df) {
+  # Extract unique airports along with their states
+  unique_airports <- unique(df[, c("airport", "origin")])
+  
+  # Remove missing values or replace with a placeholder
+  unique_airports <- na.omit(unique_airports)
+
+  # Create a dataFrame modified according to schema
+  df_airports <- data.frame(
+    airportName = unique_airports$airport,
+    airportState = unique_airports$origin,
+    airportCode = rep('ZZZ', nrow(unique_airports))
+  )
+
+  return(df_airports)
+}
+
+# Usage
+airports_data <- prepareAirportsData(bds.raw)
+
+```
+
+## Prepare Flights Data
+
+```{r prepareFlightTable, echo=F, message=F, warning=F}
+
+prepareFlightsData <- function(df, airports_df) {
+  # Convert flightDate to Date format
+  df$flight_date <- as.Date(df$flight_date, format = "%m/%d/%Y")
+
+  # Map originAirport to airport IDs
+  df$originAirport <- match(df$airport, airports_df$airportName)
+
+  # Handle missing airline values
+  df$airline[is.na(df$airline)] <- "Unknown"
+
+  # Convert heavy_flag to boolean
+  df$isHeavy <- df$heavy_flag == "Yes"
+
+  # Subset and rename columns as per table structure
+  flights_df <- data.frame(
+    fid = df$rid,
+    date = df$flight_date,
+    originAirport = df$originAirport,
+    airlineName = df$airline,
+    aircraftType = df$aircraft,
+    isHeavy = df$isHeavy
+  )
+
+  return(flights_df)
+}
+
+# Usage
+flights_data <- prepareFlightsData(bds.raw, airports_data)
+
+
+```
+
+## Prepare Conditions Data
+
+```{r  prepareConditionTable, echo=F, message=F, warning=F}
+prepareConditionsData <- function(df) {
+  # Extract unique sky conditions and remove missing values
+  unique_conditions <- unique(df$sky_conditions)
+
+  # Create a dataFrame with sky_condition and empty explanation
+  conditions_df <- data.frame(
+    sky_condition = unique_conditions,
+    explanation = rep("", length(unique_conditions)) # Setting explanation to empty string
+  )
+
+  return(conditions_df)
+}
+
+# Used case
+conditions_data <- prepareConditionsData(bds.raw)
+
+```
+
+## Prepare Strike Data
+
+```{r prepareStrikeTable, echo=F, message=F, warning=F}
+prepareStrikesData <- function(df, flights_df, conditions_df) {
+  # Convert altitude_ft to numeric and ensure it's non-negative
+  df$altitude_ft <- as.numeric(gsub(",", "", df$altitude_ft))
+  df$altitude_ft[df$altitude_ft < 0] <- 0
+
+  # Map fid to flight IDs based on the record ID
+  df$fid <- match(df$rid, flights_df$fid)
+  df$fid[is.na(df$fid)] <- -1  # Handles unmatched fids with a default value
+  
+  # Map conditions to condition IDs based on sky conditions
+  df$conditions <- match(df$sky_conditions, conditions_df$sky_condition)
+  df$conditions[is.na(df$conditions)] <- -1  # Handle unmatched conditions with a default value
+
+  # Convert damage description to boolean (TRUE for 'Damage', FALSE otherwise)
+  df$damage <- df$damage == "Damage"
+
+  # Handle numbirds
+  if (!"numbirds" %in% names(df) || all(is.na(df$numbirds))) {
+    df$numbirds <- rep(0, nrow(df))  # Assign 0 to all rows if the column doesn't exist or is entirely NA
+  } else {
+    df$numbirds <- as.integer(df$numbirds)
+    df$numbirds[is.na(df$numbirds)] <- 0  # Replace NA with 0
+  }
+
+  # Subset and rename columns as per table structure
+  strikes_df <- data.frame(
+    fid = df$fid,
+    numbirds = df$numbirds,
+    impact = df$impact,
+    damage = df$damage,
+    altitude = df$altitude_ft,
+    conditions = df$conditions
+  )
+
+  return(strikes_df)
+}
+
+# Used case
+strikes_data <- prepareStrikesData(bds.raw, flights_data, conditions_data)
+
+```
+
+
+###POPULATE THE DATABASE TABLES
+
+## Populate the airport table
+```{r poplutateAriportTable, echo=F, message=F, warning=F}
+insertAirportsData <- function(connection, df_airports) {
+  # Check for duplicate entries in airports data
+  if(nrow(airports_data) != nrow(unique(airports_data))) {
+  stop("Duplicate entries found in airports data")
+}
+  # resolve single quotes by replacing with two single quotes
+  df_airports$airportName <- gsub("'", "''", df_airports$airportName)
+  df_airports$airportState <- gsub("'", "''", df_airports$airportState)
+  df_airports$airportCode <- gsub("'", "''", df_airports$airportCode)
+
+  dbBegin(connection)
+  tryCatch({
+    dbExecute(connection, sprintf("INSERT INTO airports (airportName, airportState, airportCode) VALUES %s",
+                                  paste(sprintf("('%s', '%s', '%s')", df_airports$airportName, df_airports$airportState, df_airports$airportCode), collapse = ",")))
+    dbCommit(connection)
+  }, error = function(e) {
+    dbRollback(connection)
+    stop(e)
+  })
+}
+
+# Used case
+insertAirportsData(connection, airports_data)
+
+
+```
+
+
+## Getquery for airports table 
+```{r airportDataQuery, echo=FALSE, eval=FALSE, message=FALSE, warning=FALSE}
+airportsDataQuery <- function(connection){
+  output <- dbGetQuery(connection, "SELECT * FROM airports")
+  return(output)
+}
+
+#Used case:
+airportsTable <- airportsDataQuery(connection)
+airportsTable
+```
+
+
+## Populate Flight Table
+```{r poplutateFlightTable, echo=F, message=F, warning=F}
+insertFlightsData <- function(connection, df_flights) {
+  # Convert isHeavy logical values to 1 (TRUE) or 0 (FALSE)
+  df_flights$isHeavy <- ifelse(is.na(df_flights$isHeavy), 'NULL', as.integer(df_flights$isHeavy))
+
+  dbBegin(connection)
+  tryCatch({
+    formatted_values <- apply(df_flights, 1, function(row) {
+      row <- ifelse(is.na(row), 'NULL', row)
+      sprintf("('%s', %s, '%s', '%s', %s)", row["date"], row["originAirport"], row["airlineName"], row["aircraftType"], row["isHeavy"])
+    })
+    sql_query <- sprintf("INSERT INTO flights (date, originAirport, airlineName, aircraftType, isHeavy) VALUES %s", 
+                         paste(formatted_values, collapse = ","))
+    dbExecute(connection, sql_query)
+    dbCommit(connection)
+  }, error = function(e) {
+    dbRollback(connection)
+    stop(e)
+  })
+}
+
+# Used case
+insertFlightsData(connection, flights_data)
+
+
+
+
+```
+
+
+
+## Query flights table 
+```{r flightsDataQuery, echo=FALSE, eval=FALSE, message=FALSE, warning=FALSE}
+flightsDataQuery <- function(connection){
+  output <- dbGetQuery(connection, "SELECT * FROM flights")
+  return(output)
+}
+
+#Used case
+flightsTable <- flightsDataQuery(connection)
+flightsTable
+
+```
+
+
+## Populate 'conditions' table 
+```{r poplutateConditionsTable, echo=FALSE, message=FALSE, warning=FALSE}
+insertConditionsData <- function(connection, df_conditions) {
+  dbBegin(connection)
+  tryCatch({
+    dbExecute(connection, sprintf("INSERT INTO conditions (sky_condition, explanation) VALUES %s",
+                                  paste(sprintf("('%s', '%s')", df_conditions$sky_condition, df_conditions$explanation), collapse = ",")))
+    dbCommit(connection)
+  }, error = function(e) {
+    dbRollback(connection)
+    stop(e)
+  })
+}
+
+# Used case
+insertConditionsData(connection, conditions_data)
+
+```
+
+
+
+## Query for 'conditions' table 
+```{r ConditionsDataQuery, echo=FALSE, eval=FALSE, message=FALSE, warning=FALSE}
+conditionsDataQuery <- function(connection){
+  output <- dbGetQuery(connection, "SELECT * FROM conditions LIMIT 10")
+  return(output)
+}
+
+#used case:
+conditionsTable <- conditionsDataQuery(connection)
+```
+
+
+## Populate 'strikes'
+```{r poplutateStrieksTable, echo=F, message=FALSE, warning=FALSE}
+insertStrikesData <- function(connection, df_strikes) {
+  # Replace NA values with 'NULL' in columns that can have NA
+  df_strikes$fid <- ifelse(is.na(df_strikes$fid), 'NULL', df_strikes$fid)
+  df_strikes$numbirds <- ifelse(is.na(df_strikes$numbirds), 'NULL', df_strikes$numbirds)
+  df_strikes$impact <- ifelse(is.na(df_strikes$impact), 'NULL', df_strikes$impact)
+  df_strikes$damage <- ifelse(is.na(df_strikes$damage), 'NULL', as.integer(df_strikes$damage))
+  df_strikes$altitude <- ifelse(is.na(df_strikes$altitude), 'NULL', df_strikes$altitude)
+  df_strikes$conditions <- ifelse(is.na(df_strikes$conditions), 'NULL', df_strikes$conditions)
+
+  dbBegin(connection)
+  tryCatch({
+    formatted_values <- apply(df_strikes, 1, function(row) {
+      sprintf("(%s, %s, '%s', %s, %s, %s)", row["fid"], row["numbirds"], row["impact"], row["damage"], row["altitude"], row["conditions"])
+    })
+    sql_query <- sprintf("INSERT INTO strikes (fid, numbirds, impact, damage, altitude, conditions) VALUES %s", 
+                         paste(formatted_values, collapse = ","))
+    dbExecute(connection, sql_query)
+    dbCommit(connection)
+  }, error = function(e) {
+    dbRollback(connection)
+    stop(e)
+  })
+}
+
+# Used case
+insertStrikesData(connection, strikes_data)
+
+
+```
+
+
+## Query for 'strikes' table 
+```{r StrikesDataQuery, echo=FALSE, eval=FALSE, message=FALSE, warning=FALSE}
+strikesDataQuery <- function(connection){
+  output <- dbGetQuery(connection, "SELECT * FROM strikes LIMIT 10")
+  return(output)
+}
+
+#Used case:
+strikesTable <- strikesDataQuery(connection)
+strikesTable
+```
+
+
+
+## Top Airports with Strikes 
+```{r AirportsWithStrikes, echo=FALSE, eval=FALSE, message=FALSE, warning=FALSE, eval=TRUE}
+queryTopAirportsStrikes <- function(connection) {
+  output <- dbGetQuery(connection, 
+    "SELECT a.airportState, COUNT(*) as NumberOfIncidents 
+     FROM strikes s
+     JOIN airports a ON s.fid = a.aid
+     GROUP BY a.airportState
+     ORDER BY NumberOfIncidents DESC
+     LIMIT 10")
+  return(output)
+}
+
+# Used case
+top_airports_strikes <- queryTopAirportsStrikes(connection)
+
+
+```
+
+
+## Analysis by Airline
+```{r echo=FALSE, eval=FALSE, message=FALSE, warning=FALSE, eval=TRUE}
+queryAirlineAnalysis <- function(connection) {
+  queryResult <- dbGetQuery(connection, 
+    "SELECT f.airlineName, COUNT(*) as NumberOfIncidents
+     FROM strikes s
+     JOIN flights f ON s.fid = f.fid
+     GROUP BY f.airlineName
+     HAVING COUNT(*) > (SELECT AVG(incidents) FROM (SELECT COUNT(*) as incidents FROM strikes s2 JOIN flights f2 ON s2.fid = f2.fid GROUP BY f2.airlineName) as SubQuery)
+     ORDER BY NumberOfIncidents DESC")
+  return(queryResult)
+}
+
+# Used case
+airlineAnalysisResults <- queryAirlineAnalysis(connection)
+print(airlineAnalysisResults)
+
+
+```
+
+## Analysis by Month
+```{r StrikesByMonth, echo=FALSE, message=FALSE, warning=FALSE, eval=TRUE}
+
+queryStrikesByMonth <- function(connection) {
+  sqlQuery <- "
+    SELECT MONTHNAME(date) as Month, COUNT(*) as NumberOfStrikes
+    FROM flights f
+    JOIN strikes s ON f.fid = s.fid
+    GROUP BY MONTH(date)
+    ORDER BY MONTH(date)"
+  
+  output <- dbGetQuery(connection, sqlQuery)
+  return(output)
+}
+
+# Used case
+strikes_by_month_df <- queryStrikesByMonth(connection)
+print(head(strikes_by_month_df))
+
+
+```
+
+
+
+```{r plotStrikesByMonth, echo=FALSE, message=FALSE, warning=FALSE, eval=TRUE}
+# recall strikes_by_month_df dataframe from the previous analysis
+strikes_by_month_df$Month <- factor(strikes_by_month_df$Month, levels = month.name)
+
+# Plot
+barplot(strikes_by_month_df$NumberOfStrikes, 
+        names.arg = strikes_by_month_df$Month,
+        las = 2, # Rotate axis labels
+        col = "blue",
+        main = "Wildlife Strikes by Month",
+        xlab = "Month",
+        ylab = "Number of Strikes",
+        cex.names = 0.7)
+
+# Add data labels
+text(x = barplot(strikes_by_month_df$NumberOfStrikes, plot = FALSE), 
+     y = strikes_by_month_df$NumberOfStrikes + 5, 
+     label = strikes_by_month_df$NumberOfStrikes, 
+     pos = 3, 
+     cex = 0.8, 
+     col = "red")
+
+
+
+
+```
+
+```{r auditLog, echo=FALSE, message=FALSE, wanring=FALSE}
+
+
+# Create audit_log table
+dbExecute(connection, "
+    CREATE TABLE IF NOT EXISTS audit_log (
+        log_id INT AUTO_INCREMENT PRIMARY KEY,
+        modification_type VARCHAR(255),
+        modified_table VARCHAR(255),
+        modification_timestamp DATETIME,
+        record_id INT
+    );
+")
+
+
+
+```
+
+
+```{r storeProcedure, echo=FALSE, message=FALSE, warning=FALSE}
+
+#Drop the existing procedure
+dropProcedureQuery <- "DROP PROCEDURE IF EXISTS remove_strike"
+dbExecute(connection, dropProcedureQuery)
+
+# Create the stored procedure
+stored_procedure_query <- "
+    CREATE PROCEDURE remove_strike(IN strike_id INT)
+    BEGIN
+        DELETE FROM strikes WHERE sid = strike_id;
+        INSERT INTO audit_log (modification_type, modified_table, modification_timestamp, record_id)
+        VALUES ('Removal', 'strikes', NOW(), strike_id);
+    END
+"
+
+dbExecute(connection, stored_procedure_query)
+
+
+
+```
+
+
+
+```{r, testStoreProcedure, echo=FALSE, message=FALSE, wanring=FALSE }
+# Call stored procedure
+strike_to_remove <- 1  # Replace with the actual strike ID
+dbExecute(connection, sprintf("CALL remove_strike(%d)", strike_to_remove))
+
+# Query the audit log
+audit_log_df <- dbGetQuery(connection, "SELECT * FROM audit_log")
+print(audit_log_df)
+
+```
